@@ -1,0 +1,6 @@
+# @package dataset
+
+_target_: gans.datasets.mnist
+root: ./datasets/
+train: True
+download: False
