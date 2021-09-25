@@ -21,7 +21,9 @@ def evaluate(cfg: DictConfig) -> None:
     generated_images = evaluate_config(cfg)
 
     # save images
-    save_image(generated_images, "./{}_gen_img.png".format(cfg.model), nrow=8, normalize=True)
+    save_image(
+        generated_images, "./{}_gen_img.png".format(cfg.model), nrow=8, normalize=True
+    )
 
 
 if __name__ == "__main__":
