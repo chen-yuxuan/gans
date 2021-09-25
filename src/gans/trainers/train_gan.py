@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 import logging
-from tqdm import trange
+from tqdm import tqdm
 
 from ..models.GAN import Generator, Discriminator
 
@@ -32,7 +32,7 @@ def train_gan(
     )
 
     # start training
-    for epoch in trange(num_epochs):
+    for epoch in tqdm(range(num_epochs)):
         for images, _ in dataloader:
             images = images.to(device)
             real_labels = torch.ones(batch_size, 1).to(device)

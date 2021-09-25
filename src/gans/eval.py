@@ -4,13 +4,9 @@ import numpy as np
 
 from hydra.utils import instantiate
 from omegaconf import DictConfig
-import logging
 
 from .utils import seed_everything
 from .trainers import train_gan
-
-
-logger = logging.getLogger(__name__)
 
 
 def evaluate_config(cfg: DictConfig) -> torch.Tensor:
