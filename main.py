@@ -1,7 +1,6 @@
 import os
 import hydra
 from omegaconf import DictConfig, OmegaConf
-from torchvision.utils import save_image
 
 from gans.eval import evaluate_config
 from gans.utils import resolve_relative_path
@@ -17,15 +16,7 @@ def evaluate(cfg: DictConfig) -> None:
     resolve_relative_path(cfg, start_path=os.path.abspath(__file__))
     print(OmegaConf.to_yaml(cfg))
 
-    generated_images = evaluate_config(cfg)
-
-    # save images of `num_classes` rows and 10 columns
-    save_image(
-        generated_images,
-        "./{}_gen_img.png".format(cfg.model),
-        nrow=len(generated_images)/10,
-        normalize=True,
-    )
+    evaluate_config(cfg)
 
 
 if __name__ == "__main__":
