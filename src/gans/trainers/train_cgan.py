@@ -11,23 +11,28 @@ from ..models.GAN import Generator, Discriminator
 logger = logging.getLogger(__name__)
 
 
-def train_gan(
+def train_cgan(
     dataloader: torch.utils.data.DataLoader,
     batch_size: int = 100,
     input_shape: torch.Size = torch.Size([28, 28]),
+    num_classes: int = 10,
     hidden_size: int = 512,
-    latent_size: int = 16,
+    latent_size: int = 32,
     num_epochs: int = 100,
     g_learning_rate: float = 0.0002,
-    d_learning_rate: float = 0.0001,
+    d_learning_rate: float = 0.0002,
     weight_decay: float = 0,
     device: torch.cuda.device = None,
 ) -> torch.nn.Module:
     logger.info(locals())
 
     input_size = int(np.prod(input_shape))
-    G = Generator(input_size, hidden_size, latent_size).to(device)
-    D = Discriminator(input_size, hidden_size).to(device)
+    G = Generator(
+        input_size, hidden_size, latent_size, conditional=True, num_classes=num_classes
+    ).to(device)
+    D = Discriminator(
+        input_size, hidden_size, conditional=True, num_classes=num_classes
+    ).to(device)
 
     criterion = nn.BCELoss()
     g_optimizer = torch.optim.Adam(
@@ -40,8 +45,8 @@ def train_gan(
     # start training
     tbar = trange(num_epochs, leave=True)
     for epoch in tbar:
-        for images, _ in dataloader:
-            images = images.to(device)
+        for images, labels in dataloader:
+            images, labels = images.to(device), labels.to(device)
             real_labels = torch.ones(batch_size, 1).to(device)
             fake_labels = torch.zeros(batch_size, 1).to(device)
 
@@ -49,8 +54,8 @@ def train_gan(
             g_optimizer.zero_grad()
             # compute loss using fake images and real labels
             z = torch.randn(batch_size, latent_size).to(device)
-            fake_images = G(z)
-            pred_fake = D(fake_images)
+            fake_images = G(z, labels)
+            pred_fake = D(fake_images, labels)
             g_loss = criterion(pred_fake, real_labels)
 
             # b-p to update generator
@@ -60,13 +65,13 @@ def train_gan(
             # ========== TRAIN THE DISCRIMINATOR ==========
             d_optimizer.zero_grad()
             # compute loss using real images and real labels
-            pred_real = D(images)
+            pred_real = D(images, labels)
             d_loss_real = criterion(pred_real, real_labels)
 
             # compute loss using fake images and fake labels
             z = torch.randn(batch_size, latent_size).to(device)
-            fake_images = G(z)
-            pred_fake = D(fake_images)
+            fake_images = G(z, labels)
+            pred_fake = D(fake_images, labels)
             d_loss_fake = criterion(pred_fake, fake_labels)
 
             # b-p to update discriminator
@@ -87,7 +92,7 @@ def train_gan(
             save_image(
                 generated_images,
                 "./{}.png".format(epoch + 1),
-                nrow=10,
+                nrow=8,
                 normalize=True,
             )
     return G

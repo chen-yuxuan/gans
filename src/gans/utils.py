@@ -3,6 +3,19 @@ import torch
 import random
 from omegaconf import DictConfig
 import os
+from typing import Dict, Any
+
+
+# names of hyper-parameters
+_PARAM_NAMES = [
+    "batch_size",
+    "hidden_size",
+    "latent_size",
+    "num_epochs",
+    "g_learning_rate",
+    "d_learning_rate",
+    "weight_decay",
+]
 
 
 def seed_everything(seed: int) -> None:
@@ -48,8 +61,21 @@ def resolve_relative_path(cfg: DictConfig, start_path: str) -> None:
                 if not os.path.exists(absolute_path):
                     raise ValueError(
                         "Resolved absolute path {} does not exist, "
-                        "please check your config path again".format(
-                            absolute_path
-                        )
+                        "please check your config path again".format(absolute_path)
                     )
                 cfg.dataset[config_column_name] = absolute_path
+
+
+def read_params_from_cfg(cfg: DictConfig) -> Dict[str, Any]:
+    """Read hyperparameters from configuration.
+
+    Args:
+        cfg: Configuration of the experiment given in a dict.
+    Returns:
+        A dictionary containing the hyperparameters fron `cfg`.
+    """
+    params = {}
+    for name in _PARAM_NAMES:
+        if name in cfg:
+            params[name] = cfg[name]
+    return params

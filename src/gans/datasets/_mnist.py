@@ -17,6 +17,4 @@ def mnist(
             transforms.Normalize(stat_mean, stat_std),
         ]
     )
-    return MNIST(
-        root=root, train=train, transform=transform, download=download
-    )
+    return MNIST(root=root, train=train, transform=transform, download=download)

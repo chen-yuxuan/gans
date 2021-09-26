@@ -3,13 +3,13 @@ model: GAN
 seed: 1234
 cuda_device: 0
 
-params:
-  batch_size: 100
-  num_epochs: 200
-  learning_rate: 0.0002
-  weight_decay: 0
-  hidden_size: 256
-  latent_size: 32
+batch_size: 100
+# hidden_size: 256
+# latent_size: 16
+# num_epochs: 100
+# g_learning_rate: 0.0002
+# d_learning_rate: 0.0001
+# weight_decay: 0
 
 defaults:
   - dataset: mnist
