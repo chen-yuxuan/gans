@@ -1,5 +1,7 @@
 import torch
 from torch import nn
+from torchvision.utils import save_image
+import numpy as np
 import logging
 from tqdm import tqdm
 
@@ -12,7 +14,7 @@ logger = logging.getLogger(__name__)
 def train_gan(
     dataloader: torch.utils.data.DataLoader,
     batch_size: int = 100,
-    input_size: int = 784,
+    input_shape: int = 784,
     hidden_size: int = 512,
     latent_size: int = 32,
     num_epochs: int = 50,
@@ -20,6 +22,7 @@ def train_gan(
     weight_decay: float = 0,
     device: torch.cuda.device = None,
 ) -> torch.nn.Module:
+    input_size = int(np.prod(input_shape))
     G = Generator(input_size, hidden_size, latent_size).to(device)
     D = Discriminator(input_size, hidden_size).to(device)
 
@@ -68,10 +71,20 @@ def train_gan(
             g_optimizer.step()
 
         # print results for the last batch after every some epochs
-        if (epoch + 1) % 50 == 0:
+        if (epoch + 1) % 10 == 0:
             logger.info(
                 "Epoch [{}/{}], d_loss: {:.4f}, g_loss: {:.4f}".format(
                     epoch + 1, num_epochs, d_loss, g_loss
                 )
+            )
+            generated_images = fake_images[:64].view(
+                -1, 1, input_shape[-2], input_shape[-1]
+            )
+            # save images
+            save_image(
+                generated_images,
+                "./{}.png".format(epoch + 1),
+                nrow=8,
+                normalize=True,
             )
     return G

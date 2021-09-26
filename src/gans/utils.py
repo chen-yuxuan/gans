@@ -48,6 +48,8 @@ def resolve_relative_path(cfg: DictConfig, start_path: str) -> None:
                 if not os.path.exists(absolute_path):
                     raise ValueError(
                         "Resolved absolute path {} does not exist, "
-                        "please check your config path again".format(absolute_path)
+                        "please check your config path again".format(
+                            absolute_path
+                        )
                     )
                 cfg.dataset[config_column_name] = absolute_path

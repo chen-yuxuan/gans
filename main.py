@@ -21,7 +21,10 @@ def evaluate(cfg: DictConfig) -> None:
 
     # save images
     save_image(
-        generated_images, "./{}_gen_img.png".format(cfg.model), nrow=8, normalize=True
+        generated_images,
+        "./{}_gen_img.png".format(cfg.model),
+        nrow=8,
+        normalize=True,
     )
 
 

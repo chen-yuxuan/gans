@@ -1,6 +1,5 @@
 import torch
 from torch.utils.data import DataLoader
-import numpy as np
 
 from hydra.utils import instantiate
 from omegaconf import DictConfig
@@ -30,21 +29,29 @@ def evaluate_config(cfg: DictConfig) -> torch.Tensor:
     dataset = instantiate(cfg.dataset)
     # (28, 28) for MNIST
     input_shape = dataset.data[0].shape
-    input_size = int(np.prod(input_shape))
     num_classes = len(dataset.classes)
 
     dataloader = DataLoader(
-        dataset, batch_size=cfg.params.batch_size, shuffle=True, pin_memory=True
+        dataset,
+        batch_size=cfg.params.batch_size,
+        shuffle=True,
+        pin_memory=True,
     )
 
     # training
     if cfg.model.upper() == "GAN":
         G = train_gan(
-            dataloader=dataloader, device=device, input_size=input_size, **cfg.params
+            dataloader=dataloader,
+            device=device,
+            input_shape=input_shape,
+            **cfg.params
         )
     elif cfg.model.upper() == "CGAN":
         G = train_gan(
-            dataloader=dataloader, device=device, input_size=input_size, **cfg.params
+            dataloader=dataloader,
+            device=device,
+            input_shape=input_shape,
+            **cfg.params
         )
     else:
         raise ValueError("Unknown model: {}".format(cfg.model))
