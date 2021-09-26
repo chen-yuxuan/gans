@@ -15,7 +15,7 @@ def train_gan(
     dataloader: torch.utils.data.DataLoader,
     batch_size: int = 100,
     input_shape: torch.Size = torch.Size([28, 28]),
-    hidden_size: int = 512,
+    hidden_size: int = 256,
     latent_size: int = 16,
     num_epochs: int = 100,
     g_learning_rate: float = 0.0002,
@@ -87,7 +87,7 @@ def train_gan(
             save_image(
                 generated_images,
                 "./{}.png".format(epoch + 1),
-                nrow=10,
+                nrow=8,
                 normalize=True,
             )
     return G

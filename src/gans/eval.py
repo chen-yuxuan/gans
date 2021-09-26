@@ -58,7 +58,7 @@ def evaluate_config(cfg: DictConfig) -> torch.Tensor:
     if cfg.model.upper() in ["GAN"]:
         generated_images = G(z)
     elif cfg.model.upper() in ["CGAN"]:
-        labels = torch.Tensor([[i] * 10 for i in range(10)])
+        labels = torch.Tensor([i for i in range(num_classes) for _ in range(10)])
         generated_images = G(z, labels)
 
     return generated_images.view(-1, 1, input_shape[-2], input_shape[-1])

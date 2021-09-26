@@ -17,10 +17,10 @@ def train_cgan(
     input_shape: torch.Size = torch.Size([28, 28]),
     num_classes: int = 10,
     hidden_size: int = 512,
-    latent_size: int = 32,
+    latent_size: int = 16,
     num_epochs: int = 100,
-    g_learning_rate: float = 0.0002,
-    d_learning_rate: float = 0.0002,
+    g_learning_rate: float = 0.0001,
+    d_learning_rate: float = 0.0001,
     weight_decay: float = 0,
     device: torch.cuda.device = None,
 ) -> torch.nn.Module:

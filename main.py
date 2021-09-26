@@ -19,11 +19,11 @@ def evaluate(cfg: DictConfig) -> None:
 
     generated_images = evaluate_config(cfg)
 
-    # save images
+    # save images of `num_classes` rows and 10 columns
     save_image(
         generated_images,
         "./{}_gen_img.png".format(cfg.model),
-        nrow=8,
+        nrow=len(generated_images)/10,
         normalize=True,
     )
 
