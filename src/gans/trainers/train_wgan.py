@@ -27,10 +27,19 @@ def train_wgan(
 ) -> torch.nn.Module:
     logger.info(locals())
 
+    # unpack input shape
     input_size = int(np.prod(input_shape))
+    if len(input_shape) == 3:
+        num_channels, height, width = input_shape
+    elif len(input_shape) == 2:
+        num_channels = 1
+        height, width = input_shape
+
+    # set model
     G = Generator(input_size, hidden_size, latent_size).to(device)
     D = Discriminator(input_size, hidden_size).to(device)
 
+    # set optimizers
     g_optimizer = torch.optim.RMSprop(
         params=G.parameters(), lr=g_learning_rate, weight_decay=weight_decay
     )
@@ -85,9 +94,7 @@ def train_wgan(
         )
         # save generated images every 10 epochs
         if (epoch + 1) % 10 == 0:
-            generated_images = fake_images[:64].view(
-                -1, 1, input_shape[-2], input_shape[-1]
-            )
+            generated_images = fake_images[:64].view(-1, num_channels, height, width)
             # save images
             save_image(
                 generated_images,

@@ -7,7 +7,7 @@ from typing import Dict, Any
 
 
 # names of hyper-parameters
-_PARAM_NAMES = [
+PARAM_NAMES = [
     "batch_size",
     "hidden_size",
     "latent_size",
@@ -75,7 +75,7 @@ def read_params_from_cfg(cfg: DictConfig) -> Dict[str, Any]:
         A dictionary containing the hyperparameters fron `cfg`.
     """
     params = {}
-    for name in _PARAM_NAMES:
+    for name in PARAM_NAMES:
         if name in cfg:
             params[name] = cfg[name]
     return params

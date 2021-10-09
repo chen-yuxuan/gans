@@ -26,7 +26,15 @@ def train_cgan(
 ) -> torch.nn.Module:
     logger.info(locals())
 
+    # unpack input shape
     input_size = int(np.prod(input_shape))
+    if len(input_shape) == 3:
+        num_channels, height, width = input_shape
+    elif len(input_shape) == 2:
+        num_channels = 1
+        height, width = input_shape
+
+    # set model
     G = Generator(
         input_size, hidden_size, latent_size, conditional=True, num_classes=num_classes
     ).to(device)
@@ -34,6 +42,7 @@ def train_cgan(
         input_size, hidden_size, conditional=True, num_classes=num_classes
     ).to(device)
 
+    # set optimizers
     criterion = nn.BCELoss()
     g_optimizer = torch.optim.Adam(
         params=G.parameters(), lr=g_learning_rate, weight_decay=weight_decay
