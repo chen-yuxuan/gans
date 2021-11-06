@@ -20,8 +20,8 @@ def train_wgan(
     hidden_size: int = 256,
     latent_size: int = 64,
     num_epochs: int = 150,
-    g_learning_rate: float = 0.00005,
-    d_learning_rate: float = 0.00005,
+    g_lr: float = 0.00005,
+    d_lr: float = 0.00005,
     weight_decay: float = 0,
     device: torch.cuda.device = None,
 ) -> torch.nn.Module:
@@ -41,10 +41,10 @@ def train_wgan(
 
     # set optimizers
     g_optimizer = torch.optim.RMSprop(
-        params=G.parameters(), lr=g_learning_rate, weight_decay=weight_decay
+        params=G.parameters(), lr=g_lr, weight_decay=weight_decay
     )
     d_optimizer = torch.optim.RMSprop(
-        params=D.parameters(), lr=d_learning_rate, weight_decay=weight_decay
+        params=D.parameters(), lr=d_lr, weight_decay=weight_decay
     )
 
     # start training

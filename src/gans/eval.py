@@ -4,7 +4,7 @@ from torchvision.utils import save_image
 from hydra.utils import instantiate
 from omegaconf import DictConfig
 
-from .utils import seed_everything, read_params_from_cfg
+from .utils import seed_everything, read_hyperparams_from_cfg
 from .trainers import train_gan, train_cgan, train_wgan
 
 
@@ -39,7 +39,7 @@ def evaluate_config(cfg: DictConfig) -> torch.Tensor:
     )
 
     # training
-    params = read_params_from_cfg(cfg)
+    params = read_hyperparams_from_cfg(cfg)
     if cfg.model.upper() == "GAN":
         G = train_gan(dataloader, device=device, input_shape=input_shape, **params)
     elif cfg.model.upper() == "WGAN":

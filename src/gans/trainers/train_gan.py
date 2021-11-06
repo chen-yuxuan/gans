@@ -18,8 +18,8 @@ def train_gan(
     hidden_size: int = 256,
     latent_size: int = 16,
     num_epochs: int = 100,
-    g_learning_rate: float = 0.0002,
-    d_learning_rate: float = 0.0001,
+    g_lr: float = 0.0002,
+    d_lr: float = 0.0001,
     weight_decay: float = 0,
     device: torch.cuda.device = None,
 ) -> torch.nn.Module:
@@ -40,10 +40,10 @@ def train_gan(
     # set optimizers
     criterion = nn.BCELoss()
     g_optimizer = torch.optim.Adam(
-        params=G.parameters(), lr=g_learning_rate, weight_decay=weight_decay
+        params=G.parameters(), lr=g_lr, weight_decay=weight_decay
     )
     d_optimizer = torch.optim.Adam(
-        params=D.parameters(), lr=d_learning_rate, weight_decay=weight_decay
+        params=D.parameters(), lr=d_lr, weight_decay=weight_decay
     )
 
     # start training
