@@ -1,4 +1,4 @@
-from gans.datasets import mnist
+from gans.data import mnist
 
 
 def test_mnist():

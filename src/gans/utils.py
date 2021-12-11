@@ -1,4 +1,3 @@
-import os
 import random
 from typing import Dict, Any
 from omegaconf import DictConfig
@@ -22,6 +21,7 @@ _HYPERPARAM_NAMES = [
 
 def seed_everything(seed: int) -> None:
     """Sets random seed anywhere randomness is involved.
+
     This process makes sure all the randomness-involved operations yield the
     same result under the same `seed`, so each experiment is reproducible.
     In this function, we set the same random seed for the following modules:
@@ -37,6 +37,7 @@ def resolve_relative_path(cfg: DictConfig) -> None:
     """Resolves all the relative path(s) given in `config.dataset` into absolute path(s).
     This function makes our code runnable in docker as well, where using relative path has
     problem with locating dataset files in `src/../datasets`.
+
     Args:
         cfg: Configuration of the experiment given in a dict.
 
@@ -57,6 +58,7 @@ def read_hyperparams_from_cfg(cfg: DictConfig) -> Dict[str, Any]:
 
     Args:
         cfg: Configuration of the experiment given in a dict.
+    
     Returns:
         A dictionary containing the hyperparameters fron `cfg`.
     """
