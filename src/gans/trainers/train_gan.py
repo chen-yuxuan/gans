@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 from torchvision.utils import save_image
+
 import numpy as np
 import logging
 from tqdm import trange
@@ -28,7 +29,7 @@ def train_gan(
     # unpack input shape
     input_size = int(np.prod(input_shape))
     if len(input_shape) == 3:
-        num_channels, height, width = input_shape
+        height, width, num_channels = input_shape
     elif len(input_shape) == 2:
         num_channels = 1
         height, width = input_shape
@@ -50,7 +51,9 @@ def train_gan(
     tbar = trange(num_epochs, leave=True)
     for epoch in tbar:
         for images, _ in dataloader:
+            # it shape is automatically [batch_size, num_channels, height, width]
             images = images.to(device)
+            
             real_labels = torch.ones(batch_size, 1).to(device)
             fake_labels = torch.zeros(batch_size, 1).to(device)
 

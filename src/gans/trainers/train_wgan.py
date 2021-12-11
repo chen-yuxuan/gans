@@ -1,5 +1,6 @@
 import torch
 from torchvision.utils import save_image
+
 import numpy as np
 import logging
 from tqdm import trange
@@ -30,7 +31,7 @@ def train_wgan(
     # unpack input shape
     input_size = int(np.prod(input_shape))
     if len(input_shape) == 3:
-        num_channels, height, width = input_shape
+        height, width, num_channels = input_shape
     elif len(input_shape) == 2:
         num_channels = 1
         height, width = input_shape

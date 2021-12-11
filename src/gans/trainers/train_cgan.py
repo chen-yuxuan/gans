@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 from torchvision.utils import save_image
+
 import numpy as np
 import logging
 from tqdm import trange
@@ -29,7 +30,7 @@ def train_cgan(
     # unpack input shape
     input_size = int(np.prod(input_shape))
     if len(input_shape) == 3:
-        num_channels, height, width = input_shape
+        height, width, num_channels = input_shape
     elif len(input_shape) == 2:
         num_channels = 1
         height, width = input_shape
@@ -94,9 +95,7 @@ def train_cgan(
         )
         # save generated images every 10 epochs
         if (epoch + 1) % 10 == 0:
-            generated_images = fake_images[:64].view(
-                -1, 1, input_shape[-2], input_shape[-1]
-            )
+            generated_images = fake_images[:64].view(-1, num_channels, height, width)
             # save images
             save_image(
                 generated_images,
