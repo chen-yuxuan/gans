@@ -1,0 +1,6 @@
+# @package dataset
+
+_target_: gans.data.cifar10
+root: ./datasets/
+train: True
+download: False

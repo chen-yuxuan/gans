@@ -12,7 +12,7 @@ from gans.trainers import train_gan, train_cgan, train_wgan
 
 
 logger = logging.getLogger(__name__)
-    
+
 
 @hydra.main(config_name="config", config_path="configs")
 def main(cfg: DictConfig) -> torch.Tensor:
@@ -24,7 +24,7 @@ def main(cfg: DictConfig) -> torch.Tensor:
 
     Returns:
         Generated images given in a `torch.Tensor` of shape `(64, 1, H, W)`.
-    
+
     Raises:
         ValueError if the model provided by `cfg` is not yet supported.
     """
@@ -39,8 +39,8 @@ def main(cfg: DictConfig) -> torch.Tensor:
     )
 
     # prepare data
-    dataset = instantiate(cfg.dataset)   
-    input_shape = dataset.data[0].shape  # (28, 28) for MNIST
+    dataset = instantiate(cfg.dataset)
+    input_shape = dataset.data[0].shape  # [28, 28] for MNIST, [32, 32, 3] for CIFAR10
     num_classes = len(dataset.classes)
 
     dataloader = DataLoader(
@@ -69,7 +69,7 @@ def main(cfg: DictConfig) -> torch.Tensor:
         raise ValueError("Unsupported model: {}".format(cfg.model))
 
     # validation, i.e. generate images from a given latent vector
-    z = torch.randn(100, cfg.latent_size).to(device)
+    z = torch.randn(10 * num_classes, cfg.latent_size).to(device)
     if cfg.model.upper() in ["GAN", "WGAN"]:
         generated_images = G(z)
     elif cfg.model.upper() in ["CGAN"]:
@@ -79,8 +79,9 @@ def main(cfg: DictConfig) -> torch.Tensor:
 
     # save images of `num_classes` rows * 10 columns
     model_name, dataset_name = cfg.model.upper(), cfg.dataset._target_.split(".")[-1]
+    num_channels = input_shape[2] if len(input_shape) == 3 else 1
     save_image(
-        generated_images.view(-1, 1, input_shape[-2], input_shape[-1]),
+        generated_images.view(-1, num_channels, input_shape[0], input_shape[1]),
         "./{}_{}.png".format(model_name, dataset_name),
         nrow=num_classes,
         normalize=True,
