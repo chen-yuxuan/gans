@@ -73,10 +73,11 @@ def main(cfg: DictConfig) -> torch.Tensor:
     if cfg.model.upper() in ["GAN", "WGAN"]:
         generated_images = G(z)
     elif cfg.model.upper() in ["CGAN"]:
+        # for each class, draw 10 sample generations
         labels = torch.Tensor([i for i in range(num_classes) for _ in range(10)])
         generated_images = G(z, labels)
 
-    # save images of `num_classes` rows and 10 columns
+    # save images of `num_classes` rows * 10 columns
     model_name, dataset_name = cfg.model.upper(), cfg.dataset._target_.split(".")[-1]
     save_image(
         generated_images.view(-1, 1, input_shape[-2], input_shape[-1]),

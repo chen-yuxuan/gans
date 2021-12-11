@@ -12,4 +12,5 @@ latent_size: 16
 # weight_decay: 0
 
 defaults:
+  - _self_
   - dataset: mnist
