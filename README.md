@@ -1,4 +1,4 @@
-# Collection of Generative Adversarial Networks
+# A Collection of Generative Adversarial Networks
 
 ## 🚀 Installation
 ```
@@ -34,7 +34,7 @@ which results in something like this:
 == Configuration groups ==
 Compose your configuration from those groups (group=option)
 
-dataset: mnist
+dataset: cifar10, mnist
 
 
 == Config ==

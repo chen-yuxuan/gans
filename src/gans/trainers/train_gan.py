@@ -53,7 +53,7 @@ def train_gan(
         for images, _ in dataloader:
             # it shape is automatically [batch_size, num_channels, height, width]
             images = images.to(device)
-            
+
             real_labels = torch.ones(batch_size, 1).to(device)
             fake_labels = torch.zeros(batch_size, 1).to(device)
 
